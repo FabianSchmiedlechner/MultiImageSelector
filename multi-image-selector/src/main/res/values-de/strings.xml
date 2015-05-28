@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- welcome screen-->
+    <string name="welcometourfirstscreen">Ab jetzt gerät kein Moment deiner Reise in Vergessenheit. Mit journi nimmst du deine Erinnerungen überallhin mit!</string>
+    <string name="welcometoursecondscreentitle">Offline aufzeichnen</string>
+    <string name="welcometoursecondscreen">Ob Fotos oder Notizen, die App speichert automatisch deinen GPS Ort - während du offline bist und den Moment genießt.</string>
+    <string name="welcometourthirdscreentitle">Teilen</string>
+    <string name="welcometourthirdscreen">Speichere deine Erinnerungen gemeinsam mit deinen Mitreisenden oder lade deine Freunde und Familie ein dir von zu Hause aus zu folgen!</string>
+    <string name="welcometourfourthscreentitle">Entdecken</string>
+    <string name="welcometourfourthscreen">Nutze journi im öffentlichen Modus als deinen Blog auf unserer Web Plattform und inspiriere andere Reisende mit deinen Erfahrungen.</string>
+    <string name="welcometourbuttonlets_journi">Los geht\'s!</string>
+    <string name="welcometourbuttonnext">Weiter</string>
+    <string name="welcometourbuttonskip">Überspringen ></string>
+
+    <!-- register screen -->
+    <string name="registeremptyfieldtitle">Oops! We\'re missing something</string>
+    <string name="registeremptyfieldemail">Please provide a valid email address to proceed.</string>
+    <string name="registeremptyfieldfirstname">We need your first name to say \"Hi\" of course!</string>
+    <string name="registeremptyfieldlastname">We want to know more about you! Please enter your last name!</string>
+    <string name="registeremptyfieldpassword">Please choose a password to sign up! Then we\'re all set to start your journi.</string>
+    <string name="registerinvalidformattitle">Invalid format</string>
+    <string name="registerinvalidformatemail">Please verify if your email address is correct</string>
+    <string name="registererrorgeneraltitle">Registration failed</string>
+
+    <!-- login -->
+    <string name="loginerrortitle">Oops! We couldn\'t login</string>
+    <string name="loginerrormissing_password">We\’re missing your password. Please provide your password in order to login.</string>
+    <string name="loginerrorinvalid_email">It seems like there\'s something wrong with your email address! Please provide a valid email address to login.</string>
+    <string name="loginfailedtitle">Login failed</string>
+
+    <string name="emailsignup">Mit Email registrieren</string>
+    <string name="signIn">Anmelden</string>
+    <string name="tos">Mit der Registrierung akzeptiere ich journi\'s Nutzungsbedingungen und Datenschutzrichtlinien</string>
+
+    <!--misc-->
+    <string name="action_settings">Einstellungen</string>
+    <string name="app_name">Journi</string>
+    <string name="facebook_app_id">364032993704412</string>
+    <string name="email">Email</string>
+    <string name="firstname">Vorname</string>
+    <string name="lastname">Nachname</string>
+    <string name="password">Passwort</string>
+    <string name="add_picture">Foto hinzufügen</string>
+    <string name="forgotPassword">Passwort vergessen?</string>
+    <string name="signUp">Registrieren</string>
+    <string name="logout">Abmelden</string>
+    <string name="my_trips">Reisen</string>
+    <string name="notifications">Neuigkeiten</string>
+    <string name="profile">Profil</string>
+    <string name="trips_i_follow">Updates</string>
+    <string name="friends">Freunde</string>
+    <string name="settings">Einstellungen</string>
+    <string name="profile_my_trips">Reisen</string>
+    <string name="recover">Wiederherstellen</string>
+    <string name="bulletPoint">•</string>
+    <string name="profile_numOfTrips_suffix">Reisen</string>
+    <string name="days">Tage</string>
+    <string name="moments">Momente</string>
+    <string name="settings_about_me">Über mich</string>
+    <string name="settings_location">Ort</string>
+    <string name="login_password_email_error">TODO</string>
+    <string name="login_password_email_error_title">TODO</string>
+    <string name="login_password_recovered">TODO</string>
+    <string name="login_password_recovered_error">TODO</string>
+    <string name="login_password_recovered_error_title">TODO</string>
+    <string name="login_password_recovered_title">TODO</string>
+    <string name="change_password_new_password">TODO</string>
+    <string name="change_password_old_password">TODO</string>
+    <string name="change_password_repeat_password">TODO</string>
+    <string name="change_password_save">TODO</string>
+    <string name="change_password_title">TODO</string>
+    <string name="create_trip_title">TODO</string>
+    <string name="settingspasswordchanged">TODO</string>
+    <string name="settingspasswordchanged_title">TODO</string>
+    <string name="settingspassworderrorno_match">TODO</string>
+    <string name="settingspassworderrorno_match_title">TODO</string>
+    <string name="settingspassworderrortitle">TODO</string>
+    <string name="category_accommodation">TODO</string>
+    <string name="category_activity">TODO</string>
+    <string name="category_architecture">TODO</string>
+    <string name="category_coffee_drinks">TODO</string>
+    <string name="category_culture_art">TODO</string>
+    <string name="category_entertainment">TODO</string>
+    <string name="category_food">TODO</string>
+    <string name="category_nature">TODO</string>
+    <string name="category_nightlife">TODO</string>
+    <string name="category_other">TODO</string>
+    <string name="category_relax">TODO</string>
+    <string name="category_shopping">TODO</string>
+    <string name="category_transport">TODO</string>
+    <string name="category_worth_seeing">TODO</string>
+    <string name="destinationChoose">TODO</string>
+    <string name="destinationInfo">TODO</string>
+    <string name="no_internet_connection">TODO</string>
+
+</resources>

@@ -1,7 +1,10 @@
 <resources>
     <string name="app_name">multi-image-selector</string>
-    <string name="folder_all">All Images</string>
+    <string name="folder_all">All Photos</string>
     <string name="preview">Preview</string>
     <string name="msg_no_camera">No system camera found</string>
-    <string name="msg_amount_limit">Select images amount is limit</string>
+    <string name="msg_amount_limit">Cannot add more than 10 pictures</string>
+    <string name="image_picker_title">Add Pictures</string>
+    <string name="add_images">OK</string>
+    <string name="camera">Camera</string>
 </resources>
