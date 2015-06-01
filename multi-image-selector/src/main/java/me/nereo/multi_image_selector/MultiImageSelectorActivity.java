@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 
@@ -14,7 +16,7 @@ import java.util.ArrayList;
  * 多图选择
  * Created by Nereo on 2015/4/7.
  */
-public class MultiImageSelectorActivity extends FragmentActivity implements MultiImageSelectorFragment.Callback{
+public class MultiImageSelectorActivity extends AppCompatActivity implements MultiImageSelectorFragment.Callback{
 
     /** 最大图片选择次数，int类型，默认9 */
     public static final String EXTRA_SELECT_COUNT = "max_select_count";
@@ -41,6 +43,11 @@ public class MultiImageSelectorActivity extends FragmentActivity implements Mult
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_default);
 
+        Toolbar topToolbar = (Toolbar) findViewById(R.id.picker_top_toolbar);
+        setSupportActionBar(topToolbar);
+        getSupportActionBar().setTitle(R.string.image_picker_title);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         Intent intent = getIntent();
         mDefaultCount = intent.getIntExtra(EXTRA_SELECT_COUNT, 9);
         int mode = intent.getIntExtra(EXTRA_SELECT_MODE, MODE_MULTI);
@@ -58,15 +65,6 @@ public class MultiImageSelectorActivity extends FragmentActivity implements Mult
         getSupportFragmentManager().beginTransaction()
                 .add(R.id.image_grid, Fragment.instantiate(this, MultiImageSelectorFragment.class.getName(), bundle))
                 .commit();
-
-        // 返回按钮
-        findViewById(R.id.btn_back).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                setResult(RESULT_CANCELED);
-                finish();
-            }
-        });
 
         // 完成按钮
         mSubmitButton = (Button) findViewById(R.id.commit);
@@ -89,6 +87,13 @@ public class MultiImageSelectorActivity extends FragmentActivity implements Mult
                 }
             }
         });
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        setResult(RESULT_CANCELED);
+        finish();
+        return true;
     }
 
     @Override
