@@ -68,17 +68,18 @@ public class MultiImageSelectorActivity extends AppCompatActivity implements Mul
 
         // 完成按钮
         mSubmitButton = (Button) findViewById(R.id.commit);
-        if(resultList == null || resultList.size()<=0){
-            mSubmitButton.setText(R.string.add_images);
-            mSubmitButton.setEnabled(false);
-        }else{
+//        if(resultList == null || resultList.size()<=0 && mode == MODE_MULTI){
+//            mSubmitButton.setText(R.string.add_images);
+//            mSubmitButton.setEnabled(false);
+//        }else
+        if (mode == MODE_MULTI  && intent.hasExtra(EXTRA_DEFAULT_SELECTED_LIST)) {
             mSubmitButton.setText(getString(R.string.add_images) + "("+resultList.size()+"/"+mDefaultCount+")");
             mSubmitButton.setEnabled(true);
         }
         mSubmitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(resultList != null && resultList.size() >0){
+                if(resultList != null ) {//&& resultList.size() >0){
                     // 返回已选择的图片数据
                     Intent data = new Intent();
                     data.putStringArrayListExtra(EXTRA_RESULT, resultList);
@@ -130,7 +131,7 @@ public class MultiImageSelectorActivity extends AppCompatActivity implements Mul
         // 当为选择图片时候的状态
         if(resultList.size() == 0){
             mSubmitButton.setText(R.string.add_images);
-            mSubmitButton.setEnabled(false);
+//            mSubmitButton.setEnabled(false);
         }
     }
 

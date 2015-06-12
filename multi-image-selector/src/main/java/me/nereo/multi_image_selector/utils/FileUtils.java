@@ -19,15 +19,16 @@ public class FileUtils {
         String state = Environment.getExternalStorageState();
         if(state.equals(Environment.MEDIA_MOUNTED)){
             // 已挂载
-            File pic = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+            File pic = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getPath() + File.separator + "journi");
+            pic.mkdirs();
             String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.CHINA).format(new Date());
-            String fileName = "multi_image_"+timeStamp+"";
+            String fileName = "journi_original_"+timeStamp+"";
             File tmpFile = new File(pic, fileName+".jpg");
             return tmpFile;
         }else{
             File cacheDir = context.getCacheDir();
             String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.CHINA).format(new Date());
-            String fileName = "multi_image_"+timeStamp+"";
+            String fileName = "journi_original_"+timeStamp+"";
             File tmpFile = new File(cacheDir, fileName+".jpg");
             return tmpFile;
         }
