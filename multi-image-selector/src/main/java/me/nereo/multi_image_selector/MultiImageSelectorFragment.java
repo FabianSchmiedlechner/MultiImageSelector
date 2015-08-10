@@ -2,6 +2,8 @@ package me.nereo.multi_image_selector;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.database.Cursor;
@@ -35,6 +37,7 @@ import com.squareup.picasso.Picasso;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import me.nereo.multi_image_selector.adapter.FolderAdapter;
 import me.nereo.multi_image_selector.adapter.ImageGridAdapter;
@@ -51,17 +54,29 @@ public class MultiImageSelectorFragment extends Fragment {
 
     private static final String TAG = "MultiImageSelector";
 
-    /** 最大图片选择次数，int类型 */
+    /**
+     * 最大图片选择次数，int类型
+     */
     public static final String EXTRA_SELECT_COUNT = "max_select_count";
-    /** 图片选择模式，int类型 */
+    /**
+     * 图片选择模式，int类型
+     */
     public static final String EXTRA_SELECT_MODE = "select_count_mode";
-    /** 是否显示相机，boolean类型 */
+    /**
+     * 是否显示相机，boolean类型
+     */
     public static final String EXTRA_SHOW_CAMERA = "show_camera";
-    /** 默认选择的数据集 */
+    /**
+     * 默认选择的数据集
+     */
     public static final String EXTRA_DEFAULT_SELECTED_LIST = "default_result";
-    /** 单选 */
+    /**
+     * 单选
+     */
     public static final int MODE_SINGLE = 0;
-    /** 多选 */
+    /**
+     * 多选
+     */
     public static final int MODE_MULTI = 1;
     // 不同loader定义
     private static final int LOADER_ALL = 0;
@@ -107,7 +122,7 @@ public class MultiImageSelectorFragment extends Fragment {
         super.onAttach(activity);
         try {
             mCallback = (Callback) activity;
-        }catch (ClassCastException e){
+        } catch (ClassCastException e) {
             throw new ClassCastException("The Activity must implement MultiImageSelectorFragment.Callback interface...");
         }
     }
@@ -128,9 +143,9 @@ public class MultiImageSelectorFragment extends Fragment {
         final int mode = getArguments().getInt(EXTRA_SELECT_MODE);
 
         // 默认选择
-        if(mode == MODE_MULTI) {
+        if (mode == MODE_MULTI) {
             ArrayList<String> tmp = getArguments().getStringArrayList(EXTRA_DEFAULT_SELECTED_LIST);
-            if(tmp != null && tmp.size()>0) {
+            if (tmp != null && tmp.size() > 0) {
                 resultList = tmp;
             }
         }
@@ -154,7 +169,7 @@ public class MultiImageSelectorFragment extends Fragment {
             @Override
             public void onClick(View view) {
 
-                if(mFolderPopupWindow == null){
+                if (mFolderPopupWindow == null) {
                     createPopupFolderList(mGridWidth, mGridHeight);
                 }
 
@@ -171,7 +186,7 @@ public class MultiImageSelectorFragment extends Fragment {
 
         mPreviewBtn = (Button) view.findViewById(R.id.preview);
         // 初始化，按钮状态初始化
-        if(resultList == null || resultList.size()<=0){
+        if (resultList == null || resultList.size() <= 0) {
             mPreviewBtn.setText(R.string.preview);
             mPreviewBtn.setEnabled(false);
         }
@@ -188,23 +203,23 @@ public class MultiImageSelectorFragment extends Fragment {
             public void onScrollStateChanged(AbsListView absListView, int state) {
 
                 final Picasso picasso = Picasso.with(getActivity());
-                if(state == SCROLL_STATE_IDLE || state == SCROLL_STATE_TOUCH_SCROLL){
+                if (state == SCROLL_STATE_IDLE || state == SCROLL_STATE_TOUCH_SCROLL) {
                     picasso.resumeTag(getActivity());
-                }else{
+                } else {
                     picasso.pauseTag(getActivity());
                 }
 
-                if(state == SCROLL_STATE_IDLE){
+                if (state == SCROLL_STATE_IDLE) {
                     // 停止滑动，日期指示器消失
                     mTimeLineText.setVisibility(View.GONE);
-                }else if(state == SCROLL_STATE_FLING){
+                } else if (state == SCROLL_STATE_FLING) {
                     mTimeLineText.setVisibility(View.VISIBLE);
                 }
             }
 
             @Override
             public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-                if(mTimeLineText.getVisibility() == View.VISIBLE) {
+                if (mTimeLineText.getVisibility() == View.VISIBLE) {
                     int index = firstVisibleItem + 1 == view.getAdapter().getCount() ? view.getAdapter().getCount() - 1 : firstVisibleItem + 1;
                     Image image = (Image) view.getAdapter().getItem(index);
                     if (image != null) {
@@ -215,7 +230,8 @@ public class MultiImageSelectorFragment extends Fragment {
         });
         mGridView.setAdapter(mImageAdapter);
         mGridView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+            @Override
+            @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
             public void onGlobalLayout() {
 
                 final int width = mGridView.getWidth();
@@ -227,12 +243,12 @@ public class MultiImageSelectorFragment extends Fragment {
                 final int desireSize = getResources().getDimensionPixelOffset(R.dimen.image_size);
                 final int numCount = width / desireSize;
                 final int columnSpace = getResources().getDimensionPixelOffset(R.dimen.space_size);
-                int columnWidth = (width - columnSpace*(numCount-1)) / numCount;
+                int columnWidth = (width - columnSpace * (numCount - 1)) / numCount;
                 mImageAdapter.setItemSize(columnWidth);
 
-                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN){
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
                     mGridView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                }else{
+                } else {
                     mGridView.getViewTreeObserver().removeGlobalOnLayoutListener(this);
                 }
             }
@@ -240,16 +256,16 @@ public class MultiImageSelectorFragment extends Fragment {
         mGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                if(mImageAdapter.isShowCamera()){
+                if (mImageAdapter.isShowCamera()) {
                     // 如果显示照相机，则第一个Grid显示为照相机，处理特殊逻辑
-                    if(i == 0){
+                    if (i == 0) {
                         showCameraAction();
-                    }else{
+                    } else {
                         // 正常操作
                         Image image = (Image) adapterView.getAdapter().getItem(i);
                         selectImageFromGrid(image, mode);
                     }
-                }else{
+                } else {
                     // 正常操作
                     Image image = (Image) adapterView.getAdapter().getItem(i);
                     selectImageFromGrid(image, mode);
@@ -328,27 +344,41 @@ public class MultiImageSelectorFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         // 相机拍照完成后，返回图片路径
-        if(requestCode == REQUEST_CAMERA){
-            if(resultCode == Activity.RESULT_OK) {
+        if (requestCode == REQUEST_CAMERA) {
+            if (resultCode == Activity.RESULT_OK) {
                 if (mTmpFile != null) {
                     if (mCallback != null) {
                         mCallback.onCameraShot(mTmpFile);
+                        putMetaData();
                     }
                 }
-            }else{
-                if(mTmpFile != null && mTmpFile.exists()){
+            } else {
+                if (mTmpFile != null && mTmpFile.exists()) {
                     mTmpFile.delete();
                 }
             }
         }
     }
 
+    private void putMetaData() {
+        ContentValues values = new ContentValues();
+//        values.put(MediaStore.Images.Media.TITLE, context.getString(R.string.picture_title));
+//        values.put(MediaStore.Images.Media.DESCRIPTION, context.getString(R.string.picture_description));
+        values.put(MediaStore.Images.Media.DATE_TAKEN, System.currentTimeMillis());
+        values.put(MediaStore.Images.ImageColumns.BUCKET_ID, mTmpFile.toString().toLowerCase(Locale.US).hashCode());
+        values.put(MediaStore.Images.ImageColumns.BUCKET_DISPLAY_NAME, mTmpFile.getName().toLowerCase(Locale.US));
+        values.put("_data", mTmpFile.getAbsolutePath());
+
+        ContentResolver cr = getActivity().getContentResolver();
+        cr.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+    }
+
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         Log.d(TAG, "on change");
 
-        if(mFolderPopupWindow != null){
-            if(mFolderPopupWindow.isShowing()){
+        if (mFolderPopupWindow != null) {
+            if (mFolderPopupWindow.isShowing()) {
                 mFolderPopupWindow.dismiss();
             }
         }
@@ -391,31 +421,32 @@ public class MultiImageSelectorFragment extends Fragment {
     private void showCameraAction() {
         // 跳转到系统照相机
         Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        if(cameraIntent.resolveActivity(getActivity().getPackageManager()) != null){
+        if (cameraIntent.resolveActivity(getActivity().getPackageManager()) != null) {
             // 设置系统相机拍照后的输出路径
             // 创建临时文件
             mTmpFile = FileUtils.createTmpFile(getActivity());
             cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(mTmpFile));
             startActivityForResult(cameraIntent, REQUEST_CAMERA);
-        }else{
+        } else {
             Toast.makeText(getActivity(), R.string.msg_no_camera, Toast.LENGTH_SHORT).show();
         }
     }
 
     /**
      * 选择图片操作
+     *
      * @param image
      */
     private void selectImageFromGrid(Image image, int mode) {
-        if(image != null) {
+        if (image != null) {
             // 多选模式
-            if(mode == MODE_MULTI) {
+            if (mode == MODE_MULTI) {
                 if (resultList.contains(image.path)) {
                     resultList.remove(image.path);
-                    if(resultList.size() != 0) {
+                    if (resultList.size() != 0) {
                         mPreviewBtn.setEnabled(true);
                         mPreviewBtn.setText(getResources().getString(R.string.preview) + "(" + resultList.size() + ")");
-                    }else{
+                    } else {
                         mPreviewBtn.setEnabled(false);
                         mPreviewBtn.setText(R.string.preview);
                     }
@@ -424,7 +455,7 @@ public class MultiImageSelectorFragment extends Fragment {
                     }
                 } else {
                     // 判断选择数量问题
-                    if(mDesireImageCount == resultList.size()){
+                    if (mDesireImageCount == resultList.size()) {
                         Toast.makeText(getActivity(), R.string.msg_amount_limit, Toast.LENGTH_SHORT).show();
                         return;
                     }
@@ -437,9 +468,9 @@ public class MultiImageSelectorFragment extends Fragment {
                     }
                 }
                 mImageAdapter.select(image);
-            }else if(mode == MODE_SINGLE){
+            } else if (mode == MODE_SINGLE) {
                 // 单选模式
-                if(mCallback != null){
+                if (mCallback != null) {
                     mCallback.onSingleImageSelected(image.path);
                 }
             }
@@ -452,19 +483,19 @@ public class MultiImageSelectorFragment extends Fragment {
                 MediaStore.Images.Media.DATA,
                 MediaStore.Images.Media.DISPLAY_NAME,
                 MediaStore.Images.Media.DATE_ADDED,
-                MediaStore.Images.Media._ID };
+                MediaStore.Images.Media._ID};
 
         @Override
         public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-            if(id == LOADER_ALL) {
+            if (id == LOADER_ALL) {
                 CursorLoader cursorLoader = new CursorLoader(getActivity(),
                         MediaStore.Images.Media.EXTERNAL_CONTENT_URI, IMAGE_PROJECTION,
                         null, null, IMAGE_PROJECTION[2] + " DESC");
                 return cursorLoader;
-            }else if(id == LOADER_CATEGORY){
+            } else if (id == LOADER_CATEGORY) {
                 CursorLoader cursorLoader = new CursorLoader(getActivity(),
                         MediaStore.Images.Media.EXTERNAL_CONTENT_URI, IMAGE_PROJECTION,
-                        IMAGE_PROJECTION[0]+" like '%"+args.getString("path")+"%'", null, IMAGE_PROJECTION[2] + " DESC");
+                        IMAGE_PROJECTION[0] + " like '%" + args.getString("path") + "%'", null, IMAGE_PROJECTION[2] + " DESC");
                 return cursorLoader;
             }
 
@@ -478,13 +509,13 @@ public class MultiImageSelectorFragment extends Fragment {
                 int count = data.getCount();
                 if (count > 0) {
                     data.moveToFirst();
-                    do{
+                    do {
                         String path = data.getString(data.getColumnIndexOrThrow(IMAGE_PROJECTION[0]));
                         String name = data.getString(data.getColumnIndexOrThrow(IMAGE_PROJECTION[1]));
                         long dateTime = data.getLong(data.getColumnIndexOrThrow(IMAGE_PROJECTION[2]));
                         Image image = new Image(path, name, dateTime);
                         images.add(image);
-                        if( !hasFolderGened ) {
+                        if (!hasFolderGened) {
                             // 获取文件夹名称
                             File imageFile = new File(path);
                             File folderFile = imageFile.getParentFile();
@@ -504,12 +535,12 @@ public class MultiImageSelectorFragment extends Fragment {
                             }
                         }
 
-                    }while(data.moveToNext());
+                    } while (data.moveToNext());
 
                     mImageAdapter.setData(images);
 
                     // 设定默认选择
-                    if(resultList != null && resultList.size()>0){
+                    if (resultList != null && resultList.size() > 0) {
                         mImageAdapter.setDefaultSelected(resultList);
                     }
 
@@ -529,10 +560,13 @@ public class MultiImageSelectorFragment extends Fragment {
     /**
      * 回调接口
      */
-    public interface Callback{
+    public interface Callback {
         void onSingleImageSelected(String path);
+
         void onImageSelected(String path);
+
         void onImageUnselected(String path);
+
         void onCameraShot(File imageFile);
     }
 }

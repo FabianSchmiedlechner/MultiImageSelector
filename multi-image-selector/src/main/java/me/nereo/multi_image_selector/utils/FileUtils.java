@@ -17,22 +17,20 @@ public class FileUtils {
     public static File createTmpFile(Context context){
 
         String state = Environment.getExternalStorageState();
+        File tmpFile;
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.CHINA).format(new Date());
+        String fileName = "journi_original_"+timeStamp+"";
+
         if(state.equals(Environment.MEDIA_MOUNTED)){
             // 已挂载
             File pic = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getPath() + File.separator + "journi");
             pic.mkdirs();
-            String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.CHINA).format(new Date());
-            String fileName = "journi_original_"+timeStamp+"";
-            File tmpFile = new File(pic, fileName+".jpg");
-            return tmpFile;
+            tmpFile = new File(pic, fileName+".jpg");
         }else{
             File cacheDir = context.getCacheDir();
-            String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.CHINA).format(new Date());
-            String fileName = "journi_original_"+timeStamp+"";
-            File tmpFile = new File(cacheDir, fileName+".jpg");
-            return tmpFile;
+            tmpFile = new File(cacheDir, fileName+".jpg");
         }
-
+        return tmpFile;
     }
 
 }
